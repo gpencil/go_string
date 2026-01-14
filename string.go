@@ -1,112 +1,128 @@
 package go_string
 
 import (
-	"errors"
+	"strconv"
 	"strings"
 )
 
-type StringClass struct {
-}
-
-var String = StringClass{}
-
-func (this *StringClass) Desensitize(str string) string {
-	index := strings.Index(str, `@`)
-	if index == -1 {
-		return this.DesensitizeMobile(str)
-	} else {
-		return this.DesensitizeEmail(str)
-	}
-}
-
-/**
->7        前3后4中间4个*
-<=7 && >4 前2后2中间4个*
-<=4       报错
-*/
-func (this *StringClass) DesensitizeMobile(str string) string {
-	result := ``
-	length := len(str)
-	if length > 7 {
-		result = str[:3] + `****` + str[length-4:]
-	} else if length <= 7 && length > 4 {
-		result = str[:2] + `****` + str[length-2:]
-	} else {
-		panic(errors.New(`mobile length is too small`))
+// ToInt64 字符串转int64
+func ToInt64(s string) int64 {
+	result, err := strconv.ParseInt(s, 10, 64)
+	if err != nil {
+		return 0
 	}
 	return result
 }
 
-/**
-@前字符串长度>3   前4 中4个* 后@后面所有
-@前字符串长度<=3  前@前面所有 中4个* 后@后面所有
-*/
-func (this *StringClass) DesensitizeEmail(str string) string {
-	result := ``
-	index := strings.Index(str, `@`)
-	if index == -1 {
-		panic(errors.New(`not email`))
-	}
-	preAt := str[:index]
-	if len(preAt) > 3 {
-		result = str[:4] + `****` + str[index:]
-	} else {
-		result = preAt + `****` + str[index:]
+// ToInt 字符串转int
+func ToInt(s string) int {
+	result, err := strconv.Atoi(s)
+	if err != nil {
+		return 0
 	}
 	return result
 }
 
-func (this *StringClass) RemoveLast(str string, num int) string {
-	return str[:len(str)-num]
+// ToInt32 字符串转int32
+func ToInt32(s string) int32 {
+	result, err := strconv.ParseInt(s, 10, 32)
+	if err != nil {
+		return 0
+	}
+	return int32(result)
 }
 
-func (this *StringClass) RemoveFirst(str string, num int) string {
-	return str[num:]
-}
-
-func (this *StringClass) Reverse(str string) (result string) {
-	for _, v := range str {
-		result = string(v) + result
-	}
-	return
-}
-
-func (this *StringClass) ReplaceAll(str string, oldStr string, newStr string) (result string) {
-	return strings.Replace(str, oldStr, newStr, -1)
-}
-
-func (this *StringClass) SpanLeft(str string, length int, fillChar string) string {
-	if len(str) > length {
-		panic(errors.New(`length is too small`))
-	}
-	if len(fillChar) != 1 {
-		panic(errors.New(`length of fillChar must be 1`))
-	}
-	result := ``
-	for i := 0; i < length-len(str); i++ {
-		result += fillChar
-	}
-	return result + str
-}
-
-func (this *StringClass) SpanRight(str string, length int, fillChar string) string {
-	if len(str) > length {
-		panic(errors.New(`length is too small`))
-	}
-	if len(fillChar) != 1 {
-		panic(errors.New(`length of fillChar must be 1`))
-	}
-	result := str
-	for i := 0; i < length-len(str); i++ {
-		result += fillChar
+// ToFloat64 字符串转float64
+func ToFloat64(s string) float64 {
+	result, err := strconv.ParseFloat(s, 64)
+	if err != nil {
+		return 0.0
 	}
 	return result
 }
 
-func (this *StringClass) StartWith(str string, substr string) bool {
-	return strings.HasPrefix(str, substr)
+// Join 用分隔符拼接多个字符串
+func Join(sep string, strs ...string) string {
+	return strings.Join(strs, sep)
 }
 
-func (this *StringClass) EndWith(str string, substr string) bool {
-	return strings.HasSuffix(str, substr)
+// TrimLeft 从左边删除n个字符 hello 2 --> llo
+func TrimLeft(s string, n int) string {
+	runes := []rune(s)
+	if n >= len(runes) {
+		return ""
+	}
+	return string(runes[n:])
+}
+
+// TrimRight 从右边删除n个字符 hello 2 --> hel
+func TrimRight(s string, n int) string {
+	runes := []rune(s)
+	if n >= len(runes) {
+		return ""
+	}
+	return string(runes[:len(runes)-n])
+}
+
+// Left 从左边取n个字符 hello 2 --> he
+func Left(s string, n int) string {
+	runes := []rune(s)
+	if n >= len(runes) {
+		return s
+	}
+	return string(runes[:n])
+}
+
+// Right 从右边取n个字符 hello 2 --> lo
+func Right(s string, n int) string {
+	runes := []rune(s)
+	if n >= len(runes) {
+		return s
+	}
+	return string(runes[len(runes)-n:])
+}
+
+// Trim 去除首尾空格
+func Trim(s string) string {
+	return strings.TrimSpace(s)
+}
+
+// HasPrefix 判断前缀
+func HasPrefix(s, prefix string) bool {
+	return strings.HasPrefix(s, prefix)
+}
+
+// HasSuffix 判断后缀
+func HasSuffix(s, suffix string) bool {
+	return strings.HasSuffix(s, suffix)
+}
+
+// Contains 判断是否包含
+func Contains(s, substr string) bool {
+	return strings.Contains(s, substr)
+}
+
+// IsEmpty 判断是否为空或只有空格
+func IsEmpty(s string) bool {
+	return strings.TrimSpace(s) == ""
+}
+
+// ToUpper 转大写
+func ToUpper(s string) string {
+	return strings.ToUpper(s)
+}
+
+// ToLower 转小写
+func ToLower(s string) string {
+	return strings.ToLower(s)
+}
+
+// Replace 替换所有匹配
+func Replace(s, old, new string) string {
+	return strings.ReplaceAll(s, old, new)
+}
+
+// Split 按分隔符分割，返回数组
+func Split(s, sep string) []string {
+	return strings.Split(s, sep)
 }

@@ -1,1 +1,3 @@
-module github.com/CRORCR/go-string
+module github.com/gpencil/go-string
+
+go 1.24.0
